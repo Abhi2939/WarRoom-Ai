@@ -1,4 +1,12 @@
-def sentiment_summary(feedback):
+from langchain_core.tools import tool
+
+@tool
+def sentiment_summary(feedback:list) -> dict:
+
+    """
+    Analyzes user feedback list and returns sentiment summary,
+    top issues, and source distribution.
+    """
 
     negative_words = ["crash", "slow", "bug", "error", "frustrat", "broken", "laggy", "unusable", "ruined", "stuck", "fail", "issue", "problem", "terrible", "degraded"]
     positive_words = ["love", "great", "good", "clean", "modern", "useful", "smooth", "happy", "fine"]

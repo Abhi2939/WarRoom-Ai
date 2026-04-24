@@ -1,0 +1,15 @@
+Release Version: v2.5.0
+
+New Features:
+- Real-time chat system introduced
+- Media sharing in chat (images, videos)
+- UI redesign for messaging screen
+
+Known Issues:
+- High memory usage in chat module
+- Occasional delay in message sync
+- Increased API load due to real-time updates
+
+Recent Changes:
+- Backend upgraded to support real-time sockets
+- Payment service integration updated

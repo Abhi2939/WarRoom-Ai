@@ -29,7 +29,7 @@ def run_pm(state: dict) -> dict:
 
     print("\n[PM AGENT] Evaluating launch decision...")
 
-    response = llm.invoke(
+    response = llm.invoke([
         SystemMessage(content=system_prompt),
         HumanMessage(content=f"""
 Release info:
@@ -51,7 +51,7 @@ Based on the above:
 4. Your go/no-go recommendation: Proceed / Pause / Roll Back
 5. Key reasoning in 3-4 bullet points
         """)
-    )
+    ])
 
     print("[PM AGENT] Report ready")
 

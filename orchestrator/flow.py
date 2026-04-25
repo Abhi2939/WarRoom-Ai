@@ -45,9 +45,5 @@ def run_orchestrator(state:dict)-> dict:
 
     print("\n[ORCHESTRATOR] Synthesizing all reports into final decision...")
 
-    response = llm.invoke([
-        SystemMessage(content=ORCHESTRATOR_PROMPT),
-        HumanMessage(content=f"""
-""")
-    ])
+    
 

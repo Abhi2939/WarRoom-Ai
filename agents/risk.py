@@ -64,6 +64,6 @@ Raw Metrics (for reference):
 """)
     ])
 
-    print("[RISK AGENT] Report ready")
+    print("[RISK AGENT] Report Ready")
 
     return {"risk_report": response.content}

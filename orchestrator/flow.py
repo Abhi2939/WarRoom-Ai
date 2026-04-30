@@ -10,8 +10,6 @@ from dotenv import load_dotenv
 import json
 
 load_dotenv()
-
-
 # State
 class WarRoomState(TypedDict):
 
@@ -27,7 +25,6 @@ class WarRoomState(TypedDict):
     final_decision:str
 
 # Orchestrator Nodes
-
 llm = ChatGroq(
     model = "llama-3.3-70b-versatile",
     temperature=0
@@ -45,5 +42,72 @@ def run_orchestrator(state:dict)-> dict:
 
     print("\n[ORCHESTRATOR] Synthesizing all reports into final decision...")
 
+    response = llm.invoke([
+        SystemMessage(content=ORCHESTRATOR_PROMPT),
+        HumanMessage(content=f"""
+Analyst Report : {state["analyst_report"]}
+PM Report : {state["pm_report"]}
+Marketing Report : {state["marketing_report"]}
+Risk Report : {state["risk_report"]}
+
+Produce a final JSON structure with exactly this structure:
+{
+    {
+        "Decision": "Proceed | Pause | Roll Back",
+
+        "Rationale": {{
+            "key_drivers":["driver1","driver2","driver3"],
+            "metric_reference":["metric1 changed by X%", "metric2 at Y"],
+            "feedback_summary": "one sentence summary"
+            }},
+        "Risk register": [{{
+        "risk":"description",
+        "likelihood":"Low | Medium | High",
+        "impact": "Low | Medium | High",
+        "mitigation": "action"
+        }}
+        ],
+        "Action Plan":[
+            {
+                {
+                    "timeframe":"0-24h | 24-48h",
+                    "action":"description",
+                    "owner": "Engineering | PM | Marketing | Support"
+                }
+            }
+        ],
+        "Communication plan": {
+            {
+                "internal": "message to engineering and leadership",
+                "external": "message to users on app stores and social media"
+            }
+        },
+        "confidence_score": 0-100,
+        "confidence_boosters": ["what would increase confidence"]
+    }
+}
+""")
+    ])
+
+    try:
+        raw = response.content.strip()
+
+        if raw.startswith("'''"):
+            raw = raw.split("'''")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+        final_response = json.loads(raw.strip())
+    except Exception as e:
+        print(f"[ORCHESTRATOR] JSON parse error: {e}")
+        final_decision = {"error": "Failed to parse decision", "raw": response.content}
+
     
+    print("[ORCHESTRATOR] Final decision ready")
+
+    return {"final_decision":final_decision}
+
+
+
+
+
 

@@ -32,18 +32,20 @@ def run_marketing(state:dict) -> dict:
 
     print("\n[MARKETING AGENT] Analyzing customer sentiment...")
 
-    tool_call_msg = llm_with_tool([
-        SystemMessage(content=system_prompt),
-        HumanMessage(content=f"""
-Analyse this user feedback and call the summerize_sentiment tool : {feedback}
-""")
-    ])
+#     tool_call_msg = llm_with_tool.invoke([
+#         SystemMessage(content=system_prompt),
+#         HumanMessage(content=f"""
+# Analyse this user feedback and call the summerize_sentiment tool : {feedback}
+# """)
+#     ])
 
-    if tool_call_msg.tool_calls:
-        for tc in tool_call_msg.tool_calls:
-            if tc["name"] == "sentiment_summary":
-                tool_result = sentiment_summary.invoke(tc["args"])
-                print(f"[MARKETING AGENT] Sentiment result: {tool_result}")
+    tool_result = sentiment_summary.invoke({"feedback": feedback})
+
+    # if tool_call_msg.tool_calls:
+    #     for tc in tool_call_msg.tool_calls:
+    #         if tc["name"] == "sentiment_summary":
+    #             tool_result = sentiment_summary.invoke(tc["args"])
+    print(f"[MARKETING AGENT] Sentiment result: {tool_result}")
 
     
     final_response = llm.invoke([

@@ -31,18 +31,18 @@ def run_data_analyst(state: dict) -> dict:
 
     print("\n[DATA ANALYST] Starting analysis...")
 
-    tool_call_msg = llm_tool([
-        SystemMessage(content=system_prompt),
-        HumanMessage(content=f"Analyze these product metrics and call the analyze_metrics tool: {metrics}")
-    ])
+    # tool_call_msg = llm_tool.invoke([
+    #     SystemMessage(content=system_prompt),
+    #     HumanMessage(content=f"Analyze these product metrics and call the analyze_metrics tool: {metrics}")
+    # ])
 
-    tool_result = None
+    tool_result = analyze_metrics.invoke({"metrics": metrics})
 
-    if tool_call_msg.tool_calls:
-        for tc in tool_call_msg.tool_calls:
-            if tc["name"] == "analyze_metrics":
-                tool_result = analyze_metrics.invoke(tc["args"])
-                print(f"[DATA ANALYST] Tool result: {tool_result}")
+    # if tool_call_msg.tool_calls:
+    #     for tc in tool_call_msg.tool_calls:
+    #         if tc["name"] == "analyze_metrics":
+    #             tool_result = analyze_metrics.invoke(tc["args"])
+    print(f"[DATA ANALYST] Tool result: {tool_result}")
 
     final_response = llm.invoke([
         SystemMessage(content=system_prompt),

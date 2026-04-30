@@ -28,7 +28,8 @@ def sentiment_summary(feedback:list) -> dict:
     }
 
     for f in feedback:
-        text = f.lower()
+        #text = f.lower()
+        text = f["text"].lower()
         neg_flag = any(word in text for word in negative_words)
         pos_flag = any(word in text for word in positive_words)
 

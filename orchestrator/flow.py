@@ -15,14 +15,14 @@ class WarRoomState(TypedDict):
 
     metrics:dict
     feedback:list
-    realease_notes:str
+    release_notes:str
 
     analyst_report:str
     pm_report:str
     marketing_report:str
     risk_report:str
 
-    final_decision:str
+    final_decision:dict
 
 # Orchestrator Nodes
 llm = ChatGroq(
@@ -42,6 +42,38 @@ def run_orchestrator(state:dict)-> dict:
 
     print("\n[ORCHESTRATOR] Synthesizing all reports into final decision...")
 
+    json_template = """
+{
+    "decision": "Proceed | Pause | Roll Back",
+    "rationale": {
+        "key_drivers": ["driver1", "driver2", "driver3"],
+        "metric_references": ["metric1 changed by X%", "metric2 at Y"],
+        "feedback_summary": "one sentence summary"
+    },
+    "risk_register": [
+        {
+            "risk": "description",
+            "likelihood": "Low | Medium | High",
+            "impact": "Low | Medium | High",
+            "mitigation": "action"
+        }
+    ],
+    "action_plan": [
+        {
+            "timeframe": "0-24h | 24-48h",
+            "action": "description",
+            "owner": "Engineering | PM | Marketing | Support"
+        }
+    ],
+    "communication_plan": {
+        "internal": "message to engineering and leadership",
+        "external": "message to users on app stores and social media"
+    },
+    "confidence_score": 85,
+    "confidence_boosters": ["what would increase confidence"]
+}
+"""
+
     response = llm.invoke([
         SystemMessage(content=ORCHESTRATOR_PROMPT),
         HumanMessage(content=f"""
@@ -51,52 +83,20 @@ Marketing Report : {state["marketing_report"]}
 Risk Report : {state["risk_report"]}
 
 Produce a final JSON structure with exactly this structure:
-{
-    {
-        "Decision": "Proceed | Pause | Roll Back",
-
-        "Rationale": {{
-            "key_drivers":["driver1","driver2","driver3"],
-            "metric_reference":["metric1 changed by X%", "metric2 at Y"],
-            "feedback_summary": "one sentence summary"
-            }},
-        "Risk register": [{{
-        "risk":"description",
-        "likelihood":"Low | Medium | High",
-        "impact": "Low | Medium | High",
-        "mitigation": "action"
-        }}
-        ],
-        "Action Plan":[
-            {
-                {
-                    "timeframe":"0-24h | 24-48h",
-                    "action":"description",
-                    "owner": "Engineering | PM | Marketing | Support"
-                }
-            }
-        ],
-        "Communication plan": {
-            {
-                "internal": "message to engineering and leadership",
-                "external": "message to users on app stores and social media"
-            }
-        },
-        "confidence_score": 0-100,
-        "confidence_boosters": ["what would increase confidence"]
-    }
-}
+{json_template}
 """)
     ])
 
     try:
         raw = response.content.strip()
+        print(f"[ORCHESTRATOR] Raw response: {raw[:200]}")
+        
+        if "```json" in raw:
+            raw = raw.split("```json")[1].split("```")[0]
+        elif "```" in raw:
+            raw = raw.split("```")[1].split("```")[0]
 
-        if raw.startswith("'''"):
-            raw = raw.split("'''")[1]
-            if raw.startswith("json"):
-                raw = raw[4:]
-        final_response = json.loads(raw.strip())
+        final_decision = json.loads(raw.strip())
     except Exception as e:
         print(f"[ORCHESTRATOR] JSON parse error: {e}")
         final_decision = {"error": "Failed to parse decision", "raw": response.content}

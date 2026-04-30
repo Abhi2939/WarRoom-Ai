@@ -1,0 +1,65 @@
+{
+  "decision": "Roll Back",
+  "rationale": {
+    "key_drivers": [
+      "severe degradation in overall product performance",
+      "significant decline in key metrics post-launch",
+      "high reputational risk"
+    ],
+    "metric_references": [
+      "crash_rate increased by 427.27% to 5.8",
+      "payment_failure_rate increased by 172.0% to 6.8%",
+      "dau decreased by 30.0% to 8400"
+    ],
+    "feedback_summary": "Users are experiencing severe issues with the latest update, including app crashes, payment failures, and performance problems, resulting in a significant decline in user engagement and satisfaction."
+  },
+  "risk_register": [
+    {
+      "risk": "Reputational Risk",
+      "likelihood": "High",
+      "impact": "High",
+      "mitigation": "Implement a comprehensive communication plan to address user concerns, provide regular updates on progress, and prioritize stability, payment processing, and performance optimization."
+    },
+    {
+      "risk": "Financial Risk",
+      "likelihood": "Medium",
+      "impact": "High",
+      "mitigation": "Quantify the financial impact of the payment failure rate and decreased DAU and retention rates, and prioritize revenue-generating features and bug fixes."
+    },
+    {
+      "risk": "Technical Debt",
+      "likelihood": "Medium",
+      "impact": "High",
+      "mitigation": "Prioritize technical debt reduction, refactor code, and implement automated testing to ensure stability and performance."
+    }
+  ],
+  "action_plan": [
+    {
+      "timeframe": "0-24h",
+      "action": "Roll back to the previous version of the app",
+      "owner": "Engineering"
+    },
+    {
+      "timeframe": "24-48h",
+      "action": "Conduct a thorough analysis of the issues and identify the root causes",
+      "owner": "Engineering"
+    },
+    {
+      "timeframe": "24-48h",
+      "action": "Develop a plan to address the technical debt and improve the overall product performance",
+      "owner": "PM"
+    }
+  ],
+  "communication_plan": {
+    "internal": "The launch has not met success criteria, with a significant increase in crash rate, payment failure rate, and decrease in DAU and retention rates. Immediate attention is required to address these critical issues and warnings. Recommend rolling back to the previous version and prioritizing stability, payment processing, and performance optimization.",
+    "external": "We apologize for the issues you're experiencing with our latest update. We're working hard to resolve the problems with app crashes, payment failures, and performance. Thank you for your patience and understanding. We'll provide an update soon."
+  },
+  "confidence_score": 90,
+  "confidence_boosters": [
+    "Verification of data collection and processing methods",
+    "Quantification of financial impact",
+    "User feedback and sentiment analysis",
+    "Technical debt assessment",
+    "Comparison to industry benchmarks"
+  ]
+}

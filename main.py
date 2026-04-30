@@ -35,7 +35,7 @@ def main():
     initial_state = {
     "metrics":metrics,
     "feedback":user_feedback,
-    "realease_notes":release_notes,
+    "release_notes":release_notes,
     "analyst_report": "",
     "pm_report": "",
     "marketing_report": "",
@@ -44,14 +44,13 @@ def main():
     }
 
     print("\n[MAIN] Starting WarRoom AI...\n")
-
     final_state = warRoom.invoke(initial_state)
 
     print("\n" + "=" * 50)
     print("           FINAL DECISION")
     print("=" * 50)
 
-    print(json.dumps(final_state["final_decision"],intent = 2))
+    print(json.dumps(final_state["final_decision"],indent = 2))
 
     save_output(final_state["final_decision"])
 

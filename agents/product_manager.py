@@ -24,7 +24,7 @@ No fluff. This is a war room, decisions matter.
 def run_pm(state: dict) -> dict:
 
     metrics = state["metrics"]
-    realease_notes = state["realease_notes"]
+    release_notes = state["release_notes"]
     analyst_report = state["analyst_report"]
 
     print("\n[PM AGENT] Evaluating launch decision...")
@@ -33,7 +33,7 @@ def run_pm(state: dict) -> dict:
         SystemMessage(content=system_prompt),
         HumanMessage(content=f"""
 Release info:
-{realease_notes}
+{release_notes}
 Analyst Report:
 {analyst_report}
 

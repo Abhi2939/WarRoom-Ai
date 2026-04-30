@@ -1,4 +1,4 @@
-from langgraph.graph import START,END
+from langgraph.graph import StateGraph,START,END
 from langchain_groq import ChatGroq
 from agents.data_analyst import run_data_analyst
 from agents.marketing import run_marketing
@@ -106,6 +106,32 @@ Produce a final JSON structure with exactly this structure:
 
     return {"final_decision":final_decision}
 
+# Graph
+
+def build_graph():
+
+    graph = StateGraph(WarRoomState)
+    
+    #add nodes
+    graph.add_node("Data_Analyst_Agent",run_data_analyst)
+    graph.add_node("Marketing_Agent",run_marketing)
+    graph.add_node("PM_Agent",run_pm)
+    graph.add_node("Risk_Agent",run_risk)
+    graph.add_node("Orchestrator",run_orchestrator)
+
+    #add edges
+    graph.add_edge(START,"Data_Analyst_Agent")
+    graph.add_edge("Data_Analyst_Agent","PM_Agent")
+    graph.add_edge("PM_Agent","Marketing_Agent")
+    graph.add_edge("Marketing_Agent","Risk_Agent")
+    graph.add_edge("Risk_Agent","Orchestrator")
+    graph.add_edge("Orchestrator",END)
+
+    #compile graph  
+
+    return graph.compile()
+
+warRoom = build_graph()
 
 
 
